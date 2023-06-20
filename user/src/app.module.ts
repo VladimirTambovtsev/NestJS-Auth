@@ -7,6 +7,7 @@ import {TypeOrmModule} from '@nestjs/typeorm';
 import LogsMiddleware from './logs.middleware';
 import {AccessTokenGuard} from './user/guards';
 import {UserModule} from './user/user.module';
+import { LessonsModule } from './lessons/lessons.module';
 
 @Module({
     imports: [
@@ -33,6 +34,7 @@ import {UserModule} from './user/user.module';
         // }),
 
         UserModule,
+        LessonsModule,
     ],
     providers: [
         {

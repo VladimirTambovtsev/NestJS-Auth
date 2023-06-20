@@ -21,6 +21,7 @@ async function bootstrap() {
             .setDescription('REST API Documentation')
             .setVersion('1.0.0')
             .addTag('Microservice')
+            .addBearerAuth()
             .build();
         const document = SwaggerModule.createDocument(app, swaggerConfig);
         SwaggerModule.setup('/api/docs', app, document);
