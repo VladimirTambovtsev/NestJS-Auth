@@ -23,7 +23,6 @@
         "test:int": "jest -i --no-cache --watch --config ./test/jest-integration.json --coverage"
     },
     "dependencies": {
-        "@apollo/subgraph": "^0.4.0",
         "@compodoc/compodoc": "^1.1.19",
         "@hapi/joi": "^17.1.1",
         "@nestjs-query/core": "^0.30.0",
