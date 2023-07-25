@@ -1,4 +1,4 @@
-import {Body, Controller, Get, HttpCode, HttpStatus, Post, Req, UseGuards} from '@nestjs/common';
+import {Body, Controller, Delete, Get, HttpCode, HttpStatus, Post, Req, UseGuards} from '@nestjs/common';
 import {AuthGuard} from '@nestjs/passport';
 import {ApiBearerAuth, ApiOperation, ApiResponse, ApiTags} from '@nestjs/swagger';
 import {Request} from 'express';
@@ -8,6 +8,7 @@ import {ConfirmEmailDto, ForgotPasswordDto, LoginDto, RegisterDto, ResetPassword
 import {AccessTokenGuard, EmailConfirmedGuard, RefreshTokenGuard} from './guards';
 import {Tokens} from './types';
 import {UserService} from './user.service';
+import {User} from './entities/user.entity';
 
 @ApiTags('Auth')
 @Controller()
@@ -37,13 +38,28 @@ export class UserController {
      */
     @ApiOperation({summary: 'Login existing user by email and password'})
     @ApiResponse({status: 200, description: 'Object represents access token and refresh token'})
-    @ApiResponse({status: 400, description: 'Invalid email | Password is shorter than 12 characters'})
+    @ApiResponse({status: 400, description: 'Invalid email | Password is shorter than 8 characters'})
     @ApiResponse({status: 404, description: 'Not Found. Email or password is incorrect'})
     @Public()
     @Post('/local/login')
     @HttpCode(HttpStatus.OK)
     login(@Body() body: LoginDto): Promise<Tokens> {
         return this.userService.login(body);
+    }
+
+    /**
+     * Get info of current user
+     * @param {LoginDto} body - Email, password
+     * @returns {Tokens} Object represents access token and refresh token
+     */
+    @ApiOperation({summary: 'Get info of current user'})
+    @ApiResponse({status: 200, description: 'Object represents access token and refresh token'})
+    @ApiResponse({status: 404, description: 'Not Found. Email or password is incorrect'})
+    @UseGuards(AccessTokenGuard)
+    @Get('/local/me')
+    @HttpCode(HttpStatus.OK)
+    me(@GetCurrentUser('sub') userId: number): Promise<User> {
+        return this.userService.me(userId);
     }
 
     /**
@@ -146,6 +162,17 @@ export class UserController {
     @HttpCode(HttpStatus.OK)
     resetPassword(@Body() resetPasswordDto: ResetPasswordDto) {
         return this.userService.resetPassword(resetPasswordDto);
+    }
+
+    /**
+     * Delete account
+     */
+    @UseGuards(AccessTokenGuard)
+    @Delete('/deleteAccount')
+    @HttpCode(HttpStatus.OK)
+    async deleteOwnAccount(@GetCurrentUser('sub') userId: number) {
+        console.log('userId: ', userId);
+        return this.userService.deleteOwnAccount(userId);
     }
 
     /**

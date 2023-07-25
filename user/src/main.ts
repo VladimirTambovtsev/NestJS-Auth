@@ -10,6 +10,7 @@ async function bootstrap() {
         logger: ['error', 'warn', 'log', 'verbose', 'debug'],
     });
 
+    app.enableCors();
     const reflector = new Reflector();
     app.useGlobalGuards(new AccessTokenGuard(reflector));
     app.useGlobalPipes(new ValidationPipe());

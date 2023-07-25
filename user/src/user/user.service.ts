@@ -18,6 +18,13 @@ export class UserService {
         private jwtService: JwtService
     ) {}
 
+    async me(id) {
+        const res = await this.userRepository.findOneBy({id});
+        if (!res) throw new NotFoundException('User not found with this JWT');
+        delete res['password'];
+        return res;
+    }
+
     /**
      * Send confirmation on email to verify account
      * @param {VerifyEmail} sendEmailOptions - From, to, email subject, confirmation link
@@ -69,13 +76,13 @@ export class UserService {
     async register(registerDto: RegisterDto): Promise<Tokens> {
         const {password, password_confirm} = registerDto;
         if (password !== password_confirm) {
-            throw new BadRequestException('Passwords do not match');
+            throw new BadRequestException('Пароли не совпадают');
         }
         const alreadyExists = await this.userRepository.findOneBy({
             email: registerDto.email,
         });
         if (alreadyExists) {
-            throw new ConflictException('User already exists with this email');
+            throw new ConflictException('Этот Email ранее зарегистрирован');
         }
 
         const hashed = await bcrypt.hash(password, 12);
@@ -86,13 +93,13 @@ export class UserService {
         if (newUser) {
             const tokens = await this.getTokens(newUser.id.toString(), newUser.email);
             await this.updateRefreshTokenHash(newUser.id, tokens.refresh_token);
-            const confirmLink = `http://localhost:2000/?token=${tokens.refresh_token}`;
-            this.sendEmail({
-                from: 'Authentication',
-                to: registerDto.email,
-                subject: 'Confirm account',
-                confirmLink,
-            });
+            // const confirmLink = `http://localhost:2000/?token=${tokens.refresh_token}`;
+            // this.sendEmail({
+            //     from: 'Authentication',
+            //     to: registerDto.email,
+            //     subject: 'Confirm account',
+            //     confirmLink,
+            // });
             return tokens;
         }
     }
@@ -249,6 +256,12 @@ export class UserService {
             });
             return tokens;
         }
+    }
+
+    async deleteOwnAccount(userId: number) {
+        const user = await this.userRepository.findBy({id: userId});
+        if (!user) throw new ForbiddenException();
+        return await this.userRepository.delete({id: userId});
     }
 
     /**

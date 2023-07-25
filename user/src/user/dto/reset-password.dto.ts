@@ -11,11 +11,11 @@ export class ResetPasswordDto {
     token: string;
 
     @IsString()
-    @MinLength(12)
+    @MinLength(8)
     @MaxLength(70)
-    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'Password must include number, special character, uppercase letter',
-    })
+    // @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    //     message: 'Password must include number, special character, uppercase letter',
+    // })
     @IsNotEmpty()
     @ApiProperty({
         default: '@6h-LFd@^p}_7;h<n',
@@ -24,11 +24,11 @@ export class ResetPasswordDto {
     password: string;
 
     @IsString()
-    @MinLength(12)
+    @MinLength(8)
     @MaxLength(70)
-    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'Password must include number, special character, uppercase letter',
-    })
+    // @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    //     message: 'Password must include number, special character, uppercase letter',
+    // })
     @IsNotEmpty()
     @ApiProperty({
         default: '@6h-LFd@^p}_7;h<n',

@@ -1,12 +1,18 @@
+import {join} from 'path';
 import * as Joi from '@hapi/joi';
 import {MiddlewareConsumer, Module} from '@nestjs/common';
 import {ConfigModule} from '@nestjs/config';
 import {APP_GUARD} from '@nestjs/core';
 import {TypeOrmModule} from '@nestjs/typeorm';
+import {ServeStaticModule} from '@nestjs/serve-static';
 
 import LogsMiddleware from './logs.middleware';
 import {AccessTokenGuard} from './user/guards';
 import {UserModule} from './user/user.module';
+import {DocumentsModule} from './documents/documents.module';
+import {FaqsModule} from './faqs/faqs.module';
+import { ServicesModule } from './services/services.module';
+import { BookingsModule } from './bookings/bookings.module';
 
 @Module({
     imports: [
@@ -31,8 +37,15 @@ import {UserModule} from './user/user.module';
         //   // autoSchemaFile: join(process.cwd(), 'src/auth.schema.gql'),
         //   autoSchemaFile: true,
         // }),
+        ServeStaticModule.forRoot({
+            rootPath: join(__dirname, '..', 'uploads'),
+        }),
 
         UserModule,
+        DocumentsModule,
+        FaqsModule,
+        ServicesModule,
+        BookingsModule,
     ],
     providers: [
         {

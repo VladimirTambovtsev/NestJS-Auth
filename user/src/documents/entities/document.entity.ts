@@ -1,33 +1,27 @@
-import {Exclude} from 'class-transformer';
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
-@Entity('users')
-export class User {
+// enum DocumentType {
+//     BASIS_DOCUMNET = 'Базисные показатели',
+//     NORMAL_DOCUMENT = 'Нормативные документы',
+// }
+
+@Entity('documents')
+export class Documents {
     @PrimaryGeneratedColumn()
     id: number;
 
-    @Column({unique: true})
-    email: string;
-
-    @Column({default: true})
-    isEmailConfirmed: boolean;
-
-    @Exclude()
     @Column()
-    // hashed password
-    password: string;
+    title: string;
 
     @Column({nullable: true})
-    hashed_refresh_token: string;
+    documentPath: string;
 
-    @Column({default: 500})
-    bonuses: number;
-
-    @Column()
-    fullname: string;
-
-    @Column()
-    phone: string;
+    // @Column({
+    //     type: 'enum',
+    //     enum: DocumentType,
+    //     default: DocumentType.NORMAL_DOCUMENT,
+    // })
+    // type: string;
 
     @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
     created_at: Date;

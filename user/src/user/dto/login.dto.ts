@@ -12,14 +12,14 @@ export class LoginDto {
     email: string;
 
     @IsString()
-    @MinLength(12)
+    @MinLength(8)
     @MaxLength(70)
-    @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
-        message: 'Password must include number, special character, uppercase letter',
-    })
+    // @Matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+    //     message: 'Password must include number, special character, uppercase letter',
+    // })
     @ApiProperty({
         default: '@6h-LFd@^p}_7;h<n',
-        description: 'User password. Must include number, special character, uppercase letter and be at least 12 characters',
+        description: 'User password. Must include number, special character, uppercase letter and be at least 8 characters',
     })
     password: string;
 }

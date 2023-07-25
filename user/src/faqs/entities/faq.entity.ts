@@ -1,33 +1,15 @@
-import {Exclude} from 'class-transformer';
 import {Column, CreateDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn} from 'typeorm';
 
-@Entity('users')
-export class User {
+@Entity('faq')
+export class FAQ {
     @PrimaryGeneratedColumn()
     id: number;
 
     @Column({unique: true})
-    email: string;
+    question: string;
 
-    @Column({default: true})
-    isEmailConfirmed: boolean;
-
-    @Exclude()
-    @Column()
-    // hashed password
-    password: string;
-
-    @Column({nullable: true})
-    hashed_refresh_token: string;
-
-    @Column({default: 500})
-    bonuses: number;
-
-    @Column()
-    fullname: string;
-
-    @Column()
-    phone: string;
+    @Column({type: 'text'})
+    answer: string;
 
     @CreateDateColumn({type: 'timestamp', default: () => 'CURRENT_TIMESTAMP(6)'})
     created_at: Date;

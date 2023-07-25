@@ -1,13 +1,36 @@
 version: '3'
 
 services:
-  postgres:
-    image: 'postgres:11.5'
-    environment:
-      - 'POSTGRES_USER=gettingstarted'
-      - 'POSTGRES_DB=gettingstarted'
-      - 'POSTGRES_PASSWORD=postgres'
-    expose:
-      - '5432'
-    ports:
-      - '5432:5432'
+    postgres:
+        image: 'postgres:15.3'
+        environment:
+            - 'POSTGRES_USER=gettingstarted'
+            - 'POSTGRES_DB=gettingstarted'
+            - 'POSTGRES_PASSWORD=postgres'
+        expose:
+            - '5432'
+        ports:
+            - '5432:5432'
+        volumes:
+            - docker-nest-postgres:/var/lib/postgresql/data
+        restart: always
+
+    # api:
+    #     container_name: api
+    #     build:
+    #         dockerfile: Dockerfile
+    #         context: .
+    #     env_file:
+    #         - .env
+    #     ports:
+    #         - 3002:3002
+    #     depends_on:
+    #         - postgres
+    #     restart: always
+    #     volumes:
+    #         - ./uploads:/usr/src/app/uploads
+
+volumes:
+    redis:
+        driver: local
+    docker-nest-postgres:
